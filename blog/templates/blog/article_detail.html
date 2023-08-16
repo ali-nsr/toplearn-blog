@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Post Details</h4>
+                            <h2>Single blog post</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <span>Stand Blog HTML5 Template</span>
+                                <h4>Creative HTML Template For Bloggers!</h4>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="main-button">
+                                    <a rel="nofollow" href="https://templatemo.com/tm-551-stand-blog" target="_parent">Download
+                                        Now!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="blog-post">
+                                    <div class="blog-thumb">
+                                        <img src="{{ article.image.url }}" alt="">
+                                    </div>
+                                    <div class="down-content">
+                                        <span>{{ article.category.title }}</span>
+                                        <a href="post-details.html"><h4>{{ article.title }}</h4></a>
+                                        <ul class="post-info">
+                                            <li><a href="#">{{ article.author.get_full_name }}</a></li>
+                                            <li><a href="#">{{ article.created_date }}</a></li>
+                                            <li><a href="#">10 Comments</a></li>
+                                        </ul>
+                                        <p>{{ article.description }}</p>
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <ul class="post-tags">
+                                                        <li><i class="fa fa-tags"></i></li>
+                                                        {% for tag in article.tags.all %}
+                                                            <li><a href="#">{{ tag.title }}</a>,</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="col-6">
+                                                    <ul class="post-share">
+                                                        <li><i class="fa fa-share-alt"></i></li>
+                                                        <li><a href="#">Facebook</a>,</li>
+                                                        <li><a href="#"> Twitter</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item comments">
+                                    <div class="sidebar-heading">
+                                        <h2>{{ comment_count }} comments</h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for comment in comments %}
+                                                <li>
+                                                    {#                                                <div class="author-thumb">#}
+                                                    {#                                                    <img src="/static/assets/images/comment-author-01.jpg" alt="">#}
+                                                    {#                                                </div>#}
+                                                    <div class="right-content">
+                                                        <h4>{{ comment.user.get_full_name }}<span>{{ comment.created_date }}</span>
+                                                        </h4>
+                                                        <p>{{ comment.content }}</p>
+                                                        <form id="comment"
+                                                              action="{% url 'blog:add_comment_reply' article.id comment.id %}"
+                                                              method="post">
+                                                            {% csrf_token %}
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-sm-12">
+                                                                    <fieldset>
+                                                                        {{ comment_reply_form }}
+                                                                    </fieldset>
+                                                                    <button type="submit" class="btn btn-success m-3">Submit</button>
+                                                                </div>
+
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </li>
+
+
+                                                {% for reply in comment.rely_comments.all %}
+                                                    <li class="replied">
+                                                    {#                                                <div class="author-thumb">#}
+                                                    {#                                                    <img src="/static/assets/images/comment-author-02.jpg" alt="">#}
+                                                    {#                                                </div>#}
+                                                    <div class="right-content">
+                                                        <h4>{{ reply.user.get_full_name }}<span>{{ reply.created_Date }}</span></h4>
+                                                        <p>{{ reply.content }}</p>
+                                                    </div>
+                                                </li>
+                                                    {% endfor %}
+                                            {% endfor %}
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item submit-comment">
+                                    <div class="sidebar-heading">
+                                        <h2>Your comment</h2>
+                                    </div>
+                                    <div class="content">
+                                        <form id="comment" action="{% url 'blog:add_comment' article.id %}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-md-12 col-sm-12">
+                                                    <fieldset>
+                                                        {{ comment_form }}
+                                                    </fieldset>
+                                                    <button type="submit">Submit</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'blog/sidebar.html' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
